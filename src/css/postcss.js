@@ -9,7 +9,6 @@ export default class PostCSSCompiler extends CompilerBase {
   constructor () {
     super()
 
-    this.config = postcss => postcss
     this.compilerOptions = {
       map: { inline: true }
     }
@@ -25,11 +24,14 @@ export default class PostCSSCompiler extends CompilerBase {
     if (possibleFile) {
       console.log('found file')
       try {
-        this.config = require(possibleFile)
+        this.processor = require(possibleFile)
       } catch (e) {
         console.error(e)
       }
+    } else {
+      this.processor = postcss => postcss()
     }
+    console.log(this.processor)
 
     this.seenFilePaths = {}
   }
@@ -52,7 +54,7 @@ export default class PostCSSCompiler extends CompilerBase {
     try {
       if (!postcss) {
         const compiler = require('postcss')
-        postcss = this.config(compiler)
+        postcss = this.processor(compiler)
       }
 
       let thisPath = path.dirname(filePath)
