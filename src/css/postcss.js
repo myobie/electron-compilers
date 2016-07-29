@@ -12,9 +12,7 @@ export default class PostCSSCompiler extends CompilerBase {
       map: { inline: true }
     }
 
-    this.plugins = [
-      'autoprefixer'
-    ]
+    this.plugins = []
 
     this.seenFilePaths = {}
   }
@@ -24,6 +22,7 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   shouldCompileFile (fileName, compilerContext) {
+    console.dir({ compilerContext })
     return true
   }
 
