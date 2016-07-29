@@ -9,12 +9,12 @@ export default class PostCSSCompiler extends CompilerBase {
   constructor () {
     super()
 
+    this.config = postcss => postcss
     this.compilerOptions = {
       map: { inline: true }
     }
-    this.plugins = []
 
-    let possibleFile = path.join(process.cwd(), 'postcss.json')
+    let possibleFile = path.join(process.cwd(), '.postcss.js')
     console.dir({ possibleFile })
     try {
       fs.statSync(possibleFile)
@@ -25,14 +25,10 @@ export default class PostCSSCompiler extends CompilerBase {
     if (possibleFile) {
       console.log('found file')
       try {
-        const config = JSON.parse(fs.readFileSync(possibleFile))
-        if (config && config.plugins) {
-          this.plugins = config.plugins
-        }
+        this.config = require(possibleFile)
       } catch (e) {}
     }
 
-    console.dir({ plugins: this.plugins })
     this.seenFilePaths = {}
   }
 
@@ -54,8 +50,7 @@ export default class PostCSSCompiler extends CompilerBase {
     try {
       if (!postcss) {
         const compiler = require('postcss')
-        const plugins = this.plugins.map(name => require(name))
-        postcss = compiler(plugins)
+        postcss = this.config(compiler)
       }
 
       let thisPath = path.dirname(filePath)
