@@ -58,6 +58,7 @@ export default class BabelCompiler extends CompilerBase {
   }
 
   async compile(sourceCode, filePath, compilerContext) {
+    console({ babel: true, filePath })
     babel = babel || require('babel-core');
 
     let opts = Object.assign({}, this.compilerOptions, {

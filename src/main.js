@@ -1,13 +1,13 @@
 const filenames = [
-  'css/less',
+  // 'css/less',
   'css/postcss',
-  'css/stylus',
+  // 'css/stylus',
   'js/babel',
-  'js/coffeescript',
-  'js/typescript',
-  'json/cson',
+  // 'js/coffeescript',
+  // 'js/typescript',
+  // 'json/cson',
   'html/inline-html',
-  'html/jade',
+  // 'html/jade',
   'passthrough'
 ];
 
