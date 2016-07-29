@@ -71,8 +71,9 @@ export default class PostCSSCompiler extends CompilerBase {
       }
 
       let opts = Object.assign({}, this.compilerOptions, {
-        paths: paths,
-        filename: path.basename(filePath)
+        filename: path.basename(filePath),
+        from: filePath,
+        root: process.cwd()
       })
 
       let result = await postcss.process(sourceCode, opts)
