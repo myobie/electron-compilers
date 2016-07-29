@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/paulcbetts/electron-compilers/issues"
   },
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "homepage": "https://github.com/paulcbetts/electron-compilers",
   "dependencies": {
     "babel-core": "^6.1.2",
