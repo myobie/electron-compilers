@@ -26,7 +26,9 @@ export default class PostCSSCompiler extends CompilerBase {
       console.log('found file')
       try {
         this.config = require(possibleFile)
-      } catch (e) {}
+      } catch (e) {
+        console.error(e)
+      }
     }
 
     this.seenFilePaths = {}
