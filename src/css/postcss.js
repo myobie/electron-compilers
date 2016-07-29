@@ -15,12 +15,14 @@ export default class PostCSSCompiler extends CompilerBase {
     this.plugins = []
 
     let possibleFile = path.join(process.cwd(), 'postcss.json')
+    console.dir({ possibleFile })
     try {
       fs.statSync()
     } catch (e) {
       possibleFile = null
     }
     if (possibleFile) {
+      console.log('found file')
       try {
         const config = JSON.parse(fs.readFileSync(possibleFile))
         if (config && config.plugins) {
