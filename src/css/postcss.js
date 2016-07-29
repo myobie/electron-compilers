@@ -19,6 +19,7 @@ export default class PostCSSCompiler extends CompilerBase {
     try {
       fs.statSync()
     } catch (e) {
+      console.error(e)
       possibleFile = null
     }
     if (possibleFile) {
