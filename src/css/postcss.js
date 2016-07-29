@@ -97,6 +97,7 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   compileSync (sourceCode, filePath, compilerContext) {
+    console.error('sync compile not supported for postcss')
     throw new Error('sync compile not supported for postcss')
   }
 
