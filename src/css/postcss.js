@@ -17,7 +17,7 @@ export default class PostCSSCompiler extends CompilerBase {
     let possibleFile = path.join(process.cwd(), 'postcss.json')
     console.dir({ possibleFile })
     try {
-      fs.statSync()
+      fs.statSync(possibleFile)
     } catch (e) {
       console.error(e)
       possibleFile = null
