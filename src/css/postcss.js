@@ -27,6 +27,7 @@ export default class PostCSSCompiler extends CompilerBase {
       console.log('found file')
       try {
         processor = require(possibleFile)
+        console.log('got it')
       } catch (e) {
         console.error(e)
       }
