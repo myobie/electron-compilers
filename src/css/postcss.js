@@ -32,6 +32,7 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   async compile (sourceCode, filePath, compilerContext) {
+    console.dir({ async: true, sourceCode, filePath })
     if (!postcss) {
       const compiler = require('postcss')
       const plugins = this.plugins.map(name => require(name))
@@ -54,6 +55,8 @@ export default class PostCSSCompiler extends CompilerBase {
 
     let result = await postcss.process(sourceCode, opts)
 
+    console.log(result.css)
+
     return {
       code: result.css,
       mimeType: 'text/css'
@@ -69,6 +72,8 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   compileSync (sourceCode, filePath, compilerContext) {
+    console.dir({ sync: true, sourceCode, filePath })
+
     if (!postcss) {
       const compiler = require('postcss')
       const plugins = this.plugins.map(name => require(name))
@@ -90,6 +95,8 @@ export default class PostCSSCompiler extends CompilerBase {
     })
 
     let result = postcss.process(sourceCode, opts)
+
+    console.log(result.css)
 
     return {
       code: result.css,
