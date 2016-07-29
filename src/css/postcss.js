@@ -8,9 +8,6 @@ const mimeTypes = ['text/css']
 export default class PostCSSCompiler extends CompilerBase {
   constructor () {
     super()
-
-    console.dir({ compilerOptions: this.compilerOptions })
-
     this.seenFilePaths = {}
   }
 
@@ -19,7 +16,6 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   shouldCompileFile (fileName, compilerContext) {
-    console.dir({ shouldCompileFile: true, fileName })
     return true
   }
 
@@ -28,8 +24,6 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   async compile (sourceCode, filePath, compilerContext) {
-    console.dir({ async: true, sourceCode, filePath })
-
     try {
       if (!postcss) {
         postcss = require('postcss')()
@@ -55,8 +49,6 @@ export default class PostCSSCompiler extends CompilerBase {
         from: filePath,
         root: process.cwd()
       })
-
-      console.dir({ opts })
 
       let result = await postcss.process(sourceCode, opts)
 

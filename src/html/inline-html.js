@@ -89,7 +89,6 @@ export default class InlineHtmlCompiler extends CompilerBase {
   }
 
   async compile(sourceCode, filePath, compilerContext) {
-    console.log({ inline: true, filePath })
     cheerio = cheerio || require('cheerio');
     let $ = cheerio.load(sourceCode);
     let toWait = [];

@@ -21,7 +21,6 @@ export default class PassthroughCompiler extends SimpleCompilerBase {
   }
 
   compileSync(sourceCode, filePath) {
-    console.dir({ passthrough: true, filePath })
     return {
       code: sourceCode,
       mimeType: mimeTypes.lookup(filePath)
