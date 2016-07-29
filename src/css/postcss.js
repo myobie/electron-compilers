@@ -1,9 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 import { CompilerBase } from '../compiler-base'
 
 let postcss
-let processor
 
 const mimeTypes = ['text/css']
 
@@ -11,27 +9,7 @@ export default class PostCSSCompiler extends CompilerBase {
   constructor () {
     super()
 
-    this.compilerOptions = {
-      map: { inline: true }
-    }
-
-    let possibleFile = path.join(process.cwd(), '.postcss.js')
-    console.dir({ possibleFile })
-    try {
-      fs.statSync(possibleFile)
-    } catch (e) {
-      console.error(e)
-      possibleFile = null
-    }
-    if (possibleFile) {
-      console.log('found file')
-      try {
-        processor = require(possibleFile)
-        console.log('got it')
-      } catch (e) {
-        console.error(e)
-      }
-    }
+    console.dir({ compilerOptions: this.compilerOptions })
 
     this.seenFilePaths = {}
   }
@@ -54,10 +32,12 @@ export default class PostCSSCompiler extends CompilerBase {
 
     try {
       if (!postcss) {
-        if (processor) {
-          postcss = processor(require('postcss'))
-        } else {
-          postcss = require('postcss')()
+        postcss = require('postcss')()
+        if (this.compilerOptions.plugins) {
+          for (let pluginName of this.compilerOptions.plugins) {
+            const plugin = require(pluginName)
+            postcss = postcss.use(plugin)
+          }
         }
       }
 
@@ -76,9 +56,9 @@ export default class PostCSSCompiler extends CompilerBase {
         root: process.cwd()
       })
 
-      let result = await postcss.process(sourceCode, opts)
+      console.dir({ opts })
 
-      console.log(result.css)
+      let result = await postcss.process(sourceCode, opts)
 
       return {
         code: result.css,
