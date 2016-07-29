@@ -33,33 +33,39 @@ export default class PostCSSCompiler extends CompilerBase {
 
   async compile (sourceCode, filePath, compilerContext) {
     console.dir({ async: true, sourceCode, filePath })
-    if (!postcss) {
-      const compiler = require('postcss')
-      const plugins = this.plugins.map(name => require(name))
-      postcss = compiler.process(plugins)
-    }
 
-    let thisPath = path.dirname(filePath)
-    this.seenFilePaths[thisPath] = true
+    try {
+      if (!postcss) {
+        const compiler = require('postcss')
+        const plugins = this.plugins.map(name => require(name))
+        postcss = compiler.process(plugins)
+      }
 
-    let paths = Object.keys(this.seenFilePaths)
+      let thisPath = path.dirname(filePath)
+      this.seenFilePaths[thisPath] = true
 
-    if (this.compilerOptions.paths) {
-      paths.push(...this.compilerOptions.paths)
-    }
+      let paths = Object.keys(this.seenFilePaths)
 
-    let opts = Object.assign({}, this.compilerOptions, {
-      paths: paths,
-      filename: path.basename(filePath)
-    })
+      if (this.compilerOptions.paths) {
+        paths.push(...this.compilerOptions.paths)
+      }
 
-    let result = await postcss.process(sourceCode, opts)
+      let opts = Object.assign({}, this.compilerOptions, {
+        paths: paths,
+        filename: path.basename(filePath)
+      })
 
-    console.log(result.css)
+      let result = await postcss.process(sourceCode, opts)
 
-    return {
-      code: result.css,
-      mimeType: 'text/css'
+      console.log(result.css)
+
+      return {
+        code: result.css,
+        mimeType: 'text/css'
+      }
+    } catch (e) {
+      console.error(e)
+      return {}
     }
   }
 
@@ -72,36 +78,7 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   compileSync (sourceCode, filePath, compilerContext) {
-    console.dir({ sync: true, sourceCode, filePath })
-
-    if (!postcss) {
-      const compiler = require('postcss')
-      const plugins = this.plugins.map(name => require(name))
-      postcss = compiler.process(plugins)
-    }
-
-    let thisPath = path.dirname(filePath)
-    this.seenFilePaths[thisPath] = true
-
-    let paths = Object.keys(this.seenFilePaths)
-
-    if (this.compilerOptions.paths) {
-      paths.push(...this.compilerOptions.paths)
-    }
-
-    let opts = Object.assign({}, this.compilerOptions, {
-      paths: paths,
-      filename: path.basename(filePath)
-    })
-
-    let result = postcss.process(sourceCode, opts)
-
-    console.log(result.css)
-
-    return {
-      code: result.css,
-      mimeType: 'text/css'
-    }
+    throw new Error('sync compile not supported for postcss')
   }
 
   getCompilerVersion () {
