@@ -29,6 +29,7 @@ export default class PostCSSCompiler extends CompilerBase {
       } catch (e) {}
     }
 
+    console.dir({ plugins: this.plugins })
     this.seenFilePaths = {}
   }
 
@@ -51,7 +52,7 @@ export default class PostCSSCompiler extends CompilerBase {
       if (!postcss) {
         const compiler = require('postcss')
         const plugins = this.plugins.map(name => require(name))
-        postcss = compiler.process(plugins)
+        postcss = compiler.postcss(plugins)
       }
 
       let thisPath = path.dirname(filePath)
