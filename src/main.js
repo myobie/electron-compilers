@@ -1,5 +1,6 @@
 const filenames = [
   'css/less',
+  'css/postcss',
   'css/stylus',
   'js/babel',
   'js/coffeescript',
