@@ -3,6 +3,8 @@ import path from 'path'
 import { CompilerBase } from '../compiler-base'
 
 let postcss
+let processor
+
 const mimeTypes = ['text/css']
 
 export default class PostCSSCompiler extends CompilerBase {
@@ -24,14 +26,11 @@ export default class PostCSSCompiler extends CompilerBase {
     if (possibleFile) {
       console.log('found file')
       try {
-        this.processor = require(possibleFile)
+        processor = require(possibleFile)
       } catch (e) {
         console.error(e)
       }
-    } else {
-      this.processor = postcss => postcss()
     }
-    console.log(this.processor)
 
     this.seenFilePaths = {}
   }
@@ -41,6 +40,7 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   shouldCompileFile (fileName, compilerContext) {
+    console.dir({ shouldCompileFile: true, fileName })
     return true
   }
 
@@ -53,8 +53,11 @@ export default class PostCSSCompiler extends CompilerBase {
 
     try {
       if (!postcss) {
-        const compiler = require('postcss')
-        postcss = this.processor(compiler)
+        if (processor) {
+          postcss = processor(require('postcss'))
+        } else {
+          postcss = require('postcss')()
+        }
       }
 
       let thisPath = path.dirname(filePath)
