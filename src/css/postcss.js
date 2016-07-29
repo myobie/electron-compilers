@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import { CompilerBase } from '../compiler-base'
 
@@ -11,8 +12,22 @@ export default class PostCSSCompiler extends CompilerBase {
     this.compilerOptions = {
       map: { inline: true }
     }
-
     this.plugins = []
+
+    let possibleFile = path.join(process.cwd(), 'postcss.json')
+    try {
+      fs.statSync()
+    } catch (e) {
+      possibleFile = null
+    }
+    if (possibleFile) {
+      try {
+        const config = JSON.parse(fs.readFileSync(possibleFile))
+        if (config && config.plugins) {
+          this.plugins = config.plugins
+        }
+      } catch (e) {}
+    }
 
     this.seenFilePaths = {}
   }
@@ -22,7 +37,6 @@ export default class PostCSSCompiler extends CompilerBase {
   }
 
   shouldCompileFile (fileName, compilerContext) {
-    console.dir({ compilerContext })
     return true
   }
 
